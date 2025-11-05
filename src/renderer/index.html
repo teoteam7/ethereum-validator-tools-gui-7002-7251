@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; base-uri 'self'; object-src 'none'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' blob: data:; worker-src 'self' blob:; script-src 'self' 'unsafe-eval' blob: 'nonce-vtlock'; connect-src *">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0b0c0f" />
+  <title>Validator Tools</title>
+
+  <script type="importmap" nonce="vtlock">
+  {
+    "imports": {
+      "motion": "./vendor/motion/main.es.js"
+    }
+  }
+  </script>
+
+  <style>
+    :root{
+      --accent: #22d3ee;
+      --accent-2:#164e63;
+      --ok: #22c55e;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --radius: 0;
+      --pad: 14px;
+      --gap: 12px;
+      --shadow-1: 0 10px 30px rgba(0,0,0,.45);
+      --shadow-2: 0 6px 22px rgba(34,211,238,.20);
+      --grid-size: 18px;
+      --scrim-top: 0px;
+      --work-h: 70vh;
+      --console-maxh: 560px;
+      --bg: #0b0c0f;
+      --bg-grad-a: #0f172a;
+      --bg-grad-b: #0b2e36;
+      --panel: #121418;
+      --border: rgba(255,255,255,.08);
+      --text: #e8f3f7;
+      --muted: #9aa3b2;
+      --icon: #cbd5e1;
+      --input-bg: #0f1216;
+      --input-color: #e5e7eb;
+      --input-border: rgba(255,255,255,.16);
+      --input-placeholder: #a3acb9;
+      --tooltip-bg: #0a0a0a;
+      --tooltip-border: #333;
+      --tooltip-text: #fff;
+      --select-bg: #0f1216;
+      --select-color: #e5e7eb;
+      --select-border: rgba(255,255,255,.16);
+      --select-focus-ring: rgba(34,211,238,.55);
+      --option-bg: #0f1216;
+      --option-bg-hover: #162029;
+      --option-bg-selected: #11212a;
+      --option-color: #e5e7eb;
+      --select-arrow: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23cbd5e1' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M6 9l6 6 6-6'/></svg>");
+      --scroll-size: 10px;
+      --scroll-radius: 8px;
+      --scroll-thumb: rgba(34,211,238,.45);
+      --scroll-track: rgba(255,255,255,.06);
+      --sidebar-w: 250px;
+      --eth-dur: 2.05s;
+      --global-footer-h: 30px;
+      --badge-bg: rgba(34,211,238,.20);
+      --badge-border: rgba(34,211,238,.50);
+      --badge-color: #c9f6ff;
+      --np-input-bg: #0f1418;
+      --np-input-border: rgba(255,255,255,.26);
+      --np-input-color: #e8f3f7
+    }
+    html[data-theme="light"]{
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --bg-grad-a: #eaf7fb;
+      --bg-grad-b: #f0f7fb;
+      --panel: #ffffff;
+      --border: rgba(15,23,42,.10);
+      --text: #0b1220;
+      --muted: #5b6472;
+      --icon: #475569;
+      --input-bg: #ffffff;
+      --input-color: #0b1220;
+      --input-border: rgba(15,23,42,.14);
+      --input-placeholder: #7b8794;
+      --tooltip-bg: #0b1920;
+      --tooltip-border: rgba(34,211,238,.35);
+      --tooltip-text: #daf6fb;
+      --select-bg: #ffffff;
+      --select-color: #0b1220;
+      --select-border: rgba(15,23,42,.14);
+      --option-bg: #ffffff;
+      --option-bg-hover: #e9f7fb;
+      --option-bg-selected: #dff3fa;
+      --option-color: #0b1220;
+      --scroll-thumb: rgba(34,211,238,.45);
+      --scroll-track: rgba(0,0,0,.06);
+      --select-arrow: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23222' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M6 9l6 6 6-6'/></svg>");
+      --badge-bg: rgba(34,211,238,.14);
+      --badge-border: rgba(34,211,238,.40);
+      --badge-color: #0b1220;
+      --np-input-bg: #ffffff;
+      --np-input-border: rgba(15,23,42,.24);
+      --np-input-color: #0b1220
+    }
+    html[data-theme="neutral"]{
+      color-scheme: light;
+      --bg: #eef1f4;
+      --bg-grad-a: #f7fafc;
+      --bg-grad-b: #eef7fb;
+      --panel: #f7f9fb;
+      --border: rgba(15,23,42,.12);
+      --text: #111827;
+      --muted: #4b5563;
+      --icon: #4b5563;
+      --input-bg: #ffffff;
+      --input-color: #111827;
+      --input-border: rgba(17,24,39,.15);
+      --input-placeholder: #6b7280;
+      --tooltip-bg: #0e1116;
+      --tooltip-border: #2b2f36;
+      --tooltip-text: #e5e7eb;
+      --select-bg: #ffffff;
+      --select-color: #111827;
+      --select-border: rgba(17,24,39,.15);
+      --option-bg: #ffffff;
+      --option-bg-hover: #ebeff3;
+      --option-bg-selected: #dde4ea;
+      --option-color: #111827;
+      --scroll-thumb: rgba(34,211,238,.45);
+      --scroll-track: rgba(0,0,0,.06);
+      --select-arrow: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23555' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M6 9l6 6 6-6'/></svg>");
+      --badge-bg: rgba(34,211,238,.14);
+      --badge-border: rgba(34,211,238,.40);
+      --badge-color: #111827;
+      --np-input-bg: #ffffff;
+      --np-input-border: rgba(17,24,39,.24);
+      --np-input-color: #111827
+    }
+    * { box-sizing: border-box; }
+    html, body { height:100%; }
+    html { overflow: hidden; }
+    body {
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background:
+        radial-gradient(1200px 800px at 20% -10%, var(--bg-grad-a) 0%, var(--bg) 60%),
+        radial-gradient(1000px 800px at 120% 110%, var(--bg-grad-b) 0%, var(--bg) 60%),
+        var(--bg);
+      overflow: hidden;
+    }
+    *:focus, *:focus-visible { outline: none !important; }
+    input, select, textarea, button { outline: none !important; -webkit-tap-highlight-color: transparent; }
+    .nav button:focus, .nav button:focus-visible { outline: none !important; box-shadow: none !important; }
+    .grid-overlay { display:none; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: linear-gradient(180deg, rgba(12,14,18,.85), rgba(12,14,18,.65));
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    html[data-theme="light"] .topbar,
+    html[data-theme="neutral"] .topbar{
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.70));
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    }
+    .topbar-center {
+      position: relative; z-index: 5;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px;
+      padding: 4px 16px 12px;
+      overflow: visible;
+    }
+    .hero {
+      position: relative; z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 2px;
+      margin: 0 0 4px;
+      padding: 0;
+      opacity: 1 !important;
+    }
+    .hero-anim{
+      width: clamp(96px, 12vw, 140px);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 10px 28px rgba(34,211,238,.22));
+      animation: none;
+      will-change: transform;
+      position: relative; z-index: 2;
+    }
+    .hero-anim.pulse{ animation: ethPulse var(--eth-dur) cubic-bezier(.22,.7,.25,1) 1; }
+    @keyframes ethPulse{
+      0%   { transform: scale(1.18); }
+      28%  { transform: scale(1.00); }
+      60%  { transform: scale(1.06); }
+      100% { transform: scale(1.00); }
+    }
+    .ethGem{ width: 70%; height: 70%; }
+    .eth-piece{ transform-box: fill-box; transform-origin: 50% 50%; }
+    .hero-title{
+      position: relative; z-index: 3;
+      display: inline-flex;
+      align-items: baseline;
+      gap: .06em;
+      font-weight: 1000;
+      font-size: clamp(20px, 3.6vw, 34px);
+      line-height: 1;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin: 4px 0 2px 0;
+      user-select: none;
+      background: linear-gradient(180deg, #e8f3f7 0%, #8fb3ff 52%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 10px rgba(34,211,238,.18));
+      text-shadow:
+        0 1px 0 rgba(0,0,0,.35),
+        0 0 10px rgba(34,211,238,.12);
+    }
+.hero-trigrid-layer{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -60px;
+  width: min(1200px, 96vw);
+  height: clamp(140px, 22vw, 260px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: .35;
+}
+.hero-trigrid-layer svg{ width:100%; height:100%; display:block; }
+.hero-trigrid-layer .c1{ stroke: rgba(34,211,238,.18); }
+.hero-trigrid-layer .c2{ stroke: rgba(255,255,255,.06); }
+html[data-theme="light"] .hero-trigrid-layer .c1{ stroke: rgba(15,23,42,.14); }
+html[data-theme="light"] .hero-trigrid-layer .c2{ stroke: rgba(0,0,0,.05); }
+html[data-theme="neutral"] .hero-trigrid-layer .c1{ stroke: rgba(15,23,42,.14); }
+html[data-theme="neutral"] .hero-trigrid-layer .c2{ stroke: rgba(0,0,0,.05); }
+
+    .node-panel{
+      width: min(1100px, 96vw);
+      display: grid;
+      grid-template-columns: 1.2fr 1.2fr minmax(260px, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+      justify-items: stretch;
+      justify-content: end;
+      margin-top: 0;
+      margin-bottom: 12px;
+      position: relative; z-index: 5;
+    }
+    .node-panel .field{
+      position: relative;
+      padding: 8px 0 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+    .input-wrap { position: relative; }
+    input, select{
+      width:100%;
+      padding:10px 10px;
+      background: var(--select-bg);
+      color: var(--select-color);
+      border:1px solid var(--select-border);
+      border-radius:0;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .05s ease, background-color .15s ease, color .15s ease;
+    }
+    input{ background: var(--input-bg); color: var(--input-color); border-color: var(--input-border); }
+    input::placeholder{ color: var(--input-placeholder); }
+    select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      padding-right: 32px;
+      background-image: var(--select-arrow);
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 14px 14px;
+    }
+    select::-ms-expand{ display:none; }
+    select option{
+      background-color: var(--option-bg);
+      color: var(--option-color);
+    }
+    select option:checked{
+      background-color: var(--option-bg-selected);
+      color: var(--option-color);
+    }
+    select option:hover{
+      background-color: var(--option-bg-hover);
+      color: var(--option-color);
+    }
+    input:focus, select:focus{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--select-focus-ring);
+    }
+    .node-panel .input-wrap input,
+    .node-panel .input-wrap select{
+      background: var(--np-input-bg);
+      color: var(--np-input-color);
+      border-color: var(--np-input-border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .node-panel .input-wrap .input-badge{
+      position: absolute;
+      left: 12px;
+      top: 0;
+      transform: translateY(-50%);
+      height: 20px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--badge-color);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .25px;
+      line-height: 20px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .inline-chip{
+      position:absolute; right:8px; top:50%; transform:translateY(-50%);
+      display:inline-flex; gap:6px; align-items:center;
+      padding:2px 6px; font-size:11px; border-radius:999px;
+      border:1px solid rgba(0,0,0,.16); background:rgba(0,0,0,.04); color:#334155;
+      pointer-events:none;
+    }
+    html[data-theme="dark"] .inline-chip{
+      border-color: rgba(255,255,255,.16); background:rgba(255,255,255,.04); color:#d6dee9;
+    }
+    .inline-chip.ok{ background:#0f1a13; border-color:#1f3f2b; color:#0a7a45; }
+    html[data-theme="dark"] .inline-chip.ok{ color:#7ae6b8; }
+    .inline-chip.danger{ background:#1a0f0f; border-color:#3f1f1f; color:#b91c1c; }
+    html[data-theme="dark"] .inline-chip.danger{ color:#ffbdbd; }
+    .inline-chip .icon{ width:14px; height:14px; stroke: currentColor; stroke-width:1.8; }
+    input.has-status{ padding-right: 66px; }
+    @media (max-width: 1000px){
+      .node-panel{ grid-template-columns: 1fr; justify-content: center; }
+    }
+    .node-panel input, .node-panel select{ font-size: 12px; }
+    .node-panel input::placeholder{ font-size: 12px; }
+    .node-panel .inline-chip{ font-size: 10px; padding: 1px 5px; }
+    .btn {
+      padding: 8px 12px; border: 1px solid rgba(0,0,0,.16); background: #0c1013; color: var(--text);
+      font-weight: 800; letter-spacing: .2px; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, filter .12s ease, background-color .12s ease;
+      border-radius: 0;
+    }
+    html[data-theme="dark"] .btn{ border-color: rgba(255,255,255,.16); }
+    html[data-theme="light"] .btn{ background: #ffffff; border-color: rgba(0,0,0,.12); }
+    html[data-theme="neutral"] .btn{ background:#ffffff; border-color: rgba(0,0,0,.12); }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(34,211,238,.6); box-shadow: var(--shadow-2); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color:#001418; }
+    .btn.primary:hover { filter: brightness(1.06); }
+    .btn.ghost { background: transparent; }
+    .btn.warn { background:#1d1405; border-color:#3a2a0b; color:#8a5f04; }
+    html[data-theme="dark"] .btn.warn{ color:#f5d087; }
+    .btn.ok { background:#0f1a13; border-color:#1f3f2b; color:#0a7a45; }
+    html[data-theme="dark"] .btn.ok{ color:#7ae6b8; }
+    .btn:focus, .btn:focus-visible { outline: none !important; box-shadow: 0 0 0 2px var(--select-focus-ring); }
+    .btn:disabled { opacity:.55; cursor:not-allowed; transform:none; box-shadow:none; }
+    .scanline { display:none; }
+    .app-body{
+      position: relative;
+      display:grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      gap: 16px;
+      height: calc(100vh - var(--scrim-top) - var(--global-footer-h));
+      padding: 6px 16px 0;
+      overflow: hidden;
+    }
+    .sidebar{
+      position: sticky;
+      top: 0;
+      align-self: stretch;
+      height: 100%;
+      border-right: 1px solid var(--border);
+      padding-right: 10px;
+      margin-top: 0;
+      overflow:auto;
+    }
+    .sidebar .brand-mini{ display:none; }
+    .nav { display: flex; flex-direction: column; gap: 4px; align-items: stretch; }
+    .nav.disabled { pointer-events: none; opacity: .55; }
+    .nav button {
+      appearance: none; background: transparent; border: 1px solid transparent;
+      color: var(--text); font-weight: 800; font-size: 12px; letter-spacing: .45px;
+      text-transform: uppercase; padding: 10px 10px; cursor: pointer; opacity: .92;
+      display:flex; align-items:center; gap:10px; border-radius: 0;
+    }
+    .nav button:hover { opacity: 1; border-color: rgba(34,211,238,.25); }
+    .nav button.active{
+      background: linear-gradient(90deg, rgba(34,211,238,.12), transparent 70%);
+      border-color: rgba(34,211,238,.35);
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+    .nav .tab-ico{
+      width:16px; height:16px; stroke: var(--icon); stroke-width:1.8; fill:none; opacity:.9;
+      transition: transform .15s ease, stroke .15s ease, opacity .15s ease;
+    }
+    .nav button:hover .tab-ico{ opacity:1; transform: translateY(-1px); }
+    .nav button.active .tab-ico{ stroke: var(--accent); filter: drop-shadow(0 0 8px rgba(34,211,238,.4)); }
+    .workspace {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(520px, 50%) minmax(320px, 50%);
+      gap: 18px; padding: 0 2px;
+      align-items: start;
+      height: 100%;
+      overflow: auto;
+      overflow-x: hidden;
+    }
+    .workspace.onecol { grid-template-columns: 1fr; }
+    .leftrail, .rightrail, .tab { overflow-x: hidden; }
+    @media (max-width: 1200px) {
+      .workspace { grid-template-columns: 1fr; }
+      .node-panel { width: min(720px, 96vw); }
+    }
+    .section { border-top: 2px solid rgba(34,211,238,.25); padding-top: 14px; background: transparent !important; margin-top: 0; }
+    html[data-theme="dark"] .section{ background: transparent !important; }
+    .title { display:flex; align-items:center; gap:10px; font-size: 16px; font-weight: 900; letter-spacing:.2px; margin-bottom: 8px; padding-left: 6px; }
+    .title .icon { width:18px; height:18px; stroke: var(--icon); stroke-width:1.5; fill:none; }
+    .muted { color:var(--muted); font-size:12.5px; }
+    .row { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--gap); }
+    .row-3 { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--gap); }
+    @media (max-width: 1100px) { .row, .row-3 { grid-template-columns: 1fr; } }
+    .btns { display:flex; gap:10px; flex-wrap:wrap; }
+    .band { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(34,211,238,.12), transparent 40%), linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,0));
+    }
+    html[data-theme="dark"] .band{
+      background: linear-gradient(90deg, rgba(34,211,238,.12), transparent 40%), linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+    }
+    .band.warn { background: linear-gradient(90deg, rgba(245,158,11,.18), transparent 40%), linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,0)); }
+    html[data-theme="dark"] .band.warn { background: linear-gradient(90deg, rgba(245,158,11,.18), transparent 40%), linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,0)); }
+    .band.danger{ background: linear-gradient(90deg, rgba(239,68,68,.18), transparent 40%), linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,0)); }
+    html[data-theme="dark"] .band.danger{ background: linear-gradient(90deg, rgba(239,68,68,.18), transparent 40%), linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,0)); }
+    .console {
+      background:#000; border:1px solid #222; border-radius: 0; padding:10px; box-shadow: var(--shadow-1);
+      max-height: var(--console-maxh);
+      overflow: auto;
+      position: relative;
+    }
+    .console .toolbar{
+      position: absolute;
+      right: 8px;
+      top: -34px;
+      display: flex; gap: 6px;
+      z-index: 2;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+    thead th { text-align: left; font-weight: 800; color: #334155; border-bottom: 2px solid rgba(0,0,0,.18); padding: 8px 6px; }
+    html[data-theme="dark"] thead th{ color: #bfc6d3; border-bottom-color: rgba(255,255,255,.18); }
+    tbody td { border-bottom: 1px solid rgba(0,0,0,.10); padding: 8px 6px; color: #d8dee9; overflow: hidden; text-overflow: ellipsis; }
+    .checkline { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); user-select: none; cursor: pointer; }
+    .checkline input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); }
+    .checkline span { line-height: 1.2; }
+    .tooltip { position: fixed; z-index: 10000; max-width: 420px; background: var(--tooltip-bg); border:1px solid var(--tooltip-border); color:var(--tooltip-text); font-size:12.5px; padding:10px 12px; border-radius:0; box-shadow: var(--shadow-1); pointer-events:none; }
+    .tooltip .title { font-weight:900; margin-bottom:6px; color:#22d3ee; }
+    .tooltip.hidden { display:none; }
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; z-index:1000; }
+    .modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:1001; }
+    .modal .box { width:min(900px, 92vw); max-height:88vh; overflow:auto; background:var(--panel); border:1px solid var(--border); border-radius:0; padding:18px; box-shadow: var(--shadow-1); }
+    .show { display: flex !important; }
+    .modal .box.error { border-color: rgba(239,68,68,.45); }
+    .error-msg { white-space: pre-wrap; word-break: break-word; }
+    .modal .box.success { border-color: rgba(34,197,94,.45); }
+    .success-body { white-space: pre-wrap; word-break: break-word; }
+    .modal .box.confirm { border-color: rgba(34,211,238,.45); }
+    .scrim { position: fixed; left: 0; right: 0; bottom: 0; top: var(--scrim-top); display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.90); z-index: 9; }
+    .scrim.show { display:flex; }
+    .spinner { width: 40px; height: 40px; border-radius: 50%; border: 3px solid rgba(0,0,0,.25); border-top-color: var(--accent); animation: spin .85s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .scrim-inner{
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      max-width: 90vw;
+      padding: 8px 12px;
+    }
+    #loadingLabel{ margin:0; font-weight:700; }
+    .hidden { display:none !important; }
+    .icon { width:16px; height:16px; stroke: var(--icon); stroke-width:1.5; fill:none; vertical-align: middle; }
+    #toast {
+      position: fixed; right: 18px; bottom: 18px; background: #0c1013; color: var(--text);
+      border: 1px solid rgba(255,255,255,.16); padding: 10px 12px; font-weight: 700; letter-spacing: .2px;
+      opacity: 0; transform: translateY(8px); transition: opacity .18s ease, transform .18s ease; z-index: 10002;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    .rightrail .console,
+    #console-overview,
+    #console-bls,
+    #console-7002,
+    #console-watchdog{
+      background:#000 !important;
+      border:1px solid #222 !important;
+    }
+    .rightrail .console pre,
+    #console-overview pre,
+    #console-bls pre,
+    #console-7002 pre,
+    #console-watchdog pre{
+      background:transparent !important;
+      color:#fff !important;
+    }
+    *{
+      scrollbar-width: thin;
+      scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+    }
+    *::-webkit-scrollbar{ width: var(--scroll-size); height: var(--scroll-size); }
+    *::-webkit-scrollbar-thumb{
+      background: var(--scroll-thumb); border: 2px solid transparent; background-clip: padding-box; border-radius: var(--scroll-radius);
+    }
+    *::-webkit-scrollbar-track{ background: var(--scroll-track); }
+    #globalFooter{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: var(--global-footer-h);
+      z-index: 11;
+      background: linear-gradient(180deg, rgba(12,14,18,.92), rgba(12,14,18,.96));
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(6px);
+    }
+    html[data-theme="light"] #globalFooter,
+    html[data-theme="neutral"] #globalFooter{
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.92));
+    }
+    #globalFooter .gf{
+      height: 100%;
+      display: grid;
+      grid-template-columns: auto auto auto 1fr auto auto auto;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      line-height: 1;
+    }
+    .gf-section{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      line-height: 1;
+    }
+    .gf-section.ok    { border-color: rgba(34,197,94,.55); }
+    .gf-section.warn  { border-color: rgba(245,158,11,.55); }
+    .gf-section.bad   { border-color: rgba(239,68,68,.55); }
+    .gf-label{ color: var(--muted); }
+    .gf-cooldown{ gap: 8px; justify-self: start; }
+    .gf-bar{
+      width: 120px; height: 4px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    #gfCoolFill{
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(34,211,238,.35) inset;
+      transition: width .12s linear;
+    }
+    #gfRightHead, #gfRightChain, #gfRightAge { justify-self: end; }
+    #gfValBadge{ display:none !important; }
+    .section label{
+      font-size: 11px;
+      line-height: 1.15;
+      letter-spacing: .2px;
+      color: var(--muted);
+    }
+    @media (max-width: 1100px){
+      .section label{ font-size: 10px; }
+    }
+    .input-wrap .hint-icon.in-input{
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; line-height: 18px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.15);
+      color: var(--muted);
+      cursor: help; user-select: none;
+      opacity: .85;
+    }
+    .input-wrap .hint-icon.in-input:hover{ opacity: 1; }
+    .input-wrap.has-hint input{ padding-right: 34px; }
+    .row-filter{
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--gap);
+      align-items: end;
+    }
+    .row-filter .actions{ display:flex; gap:10px; }
+    .modal .box { padding: 18px 20px 16px; }
+    .modal .box .error-head,
+    .modal .box .success-head,
+    .modal .box .confirm-head { margin-bottom: 10px; }
+    .modal .box .error-body,
+    .modal .box .success-body,
+    .modal .box .confirm-body {
+      margin: 0; padding: 4px 0 0; line-height: 1.35; word-break: break-word; overflow-wrap: anywhere;
+    }
+    .modal .box .error-msg {
+      margin: 8px 0 0; padding: 10px 12px; background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      max-height: 42vh; overflow: auto; white-space: pre-wrap;
+    }
+    .modal .box.success .icon { }
+    .modal .box .modal-actions {
+      display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .modal .box .modal-actions .btn { min-height: 36px; padding: 0 14px; }
+    .modal .box .title { margin: 0; line-height: 1.2; font-weight: 900; }
+    .modal .box .muted { margin: 0; line-height: 1.2; }
+    @media (max-width: 560px) {
+      .modal .box { padding: 16px 14px 14px; }
+      .modal .box .modal-actions { gap: 8px; padding-top: 10px; }
+    }
+    .modal .box .error-head,
+    .modal .box .success-head,
+    .modal .box .confirm-head {
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      padding: 6px 0 !important;
+      margin: 0 0 10px 0 !important;
+      min-height: 48px !important;
+    }
+    .modal .box.error   .icon,
+    .modal .box.success .icon,
+    .modal .box.confirm .icon {
+      width: 32px !important; height: 32px !important; flex: 0 0 32px !important; display: block !important;
+      box-sizing: content-box !important; padding: 6px !important; border-radius: 9999px !important; margin: 0 !important; transform: none !important; vertical-align: middle !important;
+    }
+    .modal .box.error   .icon { background: rgba(239,68,68,.14) !important;  color: #ef4444 !important; stroke-width: 2.2 !important; }
+    .modal .box.success .icon { background: rgba(34,197,94,.14) !important;  color: #22c55e !important; stroke-width: 2.2 !important; }
+    .modal .box.confirm .icon { background: rgba(34,211,238,.14) !important; color: #22d3ee !important; stroke-width: 2.2 !important; }
+    .modal .box .error-head .icon *,
+    .modal .box .success-head .icon *,
+    .modal .box .confirm-head .icon * { stroke: currentColor !important; fill: none !important; }
+    .modal .box .title { margin: 0 !important; line-height: 1.2 !important; font-weight: 900 !important; }
+    .modal .box .muted { margin: 0 !important; line-height: 1.2 !important; }
+    .modal .box .error-body,
+    .modal .box .success-body,
+    .modal .box .confirm-body {
+      margin: 0 !important; padding: 4px 0 0 !important; line-height: 1.35 !important; word-break: break-word !important; overflow-wrap: anywhere !important;
+    }
+    .modal .box .error-msg {
+      margin: 8px 0 0 !important; padding: 10px 12px !important; background: rgba(255,255,255,.04) !important; border: 1px solid var(--border) !important;
+      max-height: 42vh !important; overflow: auto !important; white-space: pre-wrap !important;
+    }
+    .modal .box details { margin-top: 10px !important; }
+    .modal .box details > summary { cursor: pointer !important; margin: 0 0 6px 0 !important; color: var(--muted) !important; }
+    .modal .box .modal-actions {
+      display: flex !important; justify-content: flex-end !important; align-items: center !important; gap: 10px !important;
+      margin-top: 14px !important; padding-top: 12px !important; border-top: 1px solid var(--border) !important;
+    }
+    .modal .box .modal-actions .btn { min-height: 36px !important; padding: 0 14px !important; }
+    .modal .box { padding: 18px 20px 16px !important; }
+    @media (max-width: 560px) {
+      .modal .box { padding: 16px 14px 14px !important; }
+      .modal .box .modal-actions { gap: 8px !important; padding-top: 10px !important; }
+    }
+.version-badge {
+  position: fixed;
+  top: 10px;
+  right: 12px;
+  background: #16a34a;
+  color: #eafff2;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .25px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,.35);
+  z-index: 9999;
+  user-select: none;
+  opacity: 0.95;
+}
+
+
+.hero-trigrid-layer{
+  top: -60px;
+  height: clamp(140px, 22vw, 260px);
+  opacity: .35;
+}
+.hero-trigrid-layer .c1{ stroke: rgba(34,211,238,.18); }
+.hero-trigrid-layer .c2{ stroke: rgba(255,255,255,.06); }
+html[data-theme="light"] .hero-trigrid-layer .c1{ stroke: rgba(15,23,42,.14); }
+html[data-theme="light"] .hero-trigrid-layer .c2{ stroke: rgba(0,0,0,.05); }
+html[data-theme="neutral"] .hero-trigrid-layer .c1{ stroke: rgba(15,23,42,.14); }
+html[data-theme="neutral"] .hero-trigrid-layer .c2{ stroke: rgba(0,0,0,.05); }
+
+.node-panel .input-wrap .input-badge{
+  position: absolute;
+  top: -10px;
+  left: 8px;
+  transform: none;
+  height: 16px;
+  line-height: 16px;
+  padding: 0 6px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .2px;
+  text-transform: uppercase;
+  background: #22d3ee;
+  border: 1px solid #22d3ee;
+  color: #001418;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 1;
+  z-index: 3;
+}
+
+html[data-theme="light"] .node-panel .input-wrap .input-badge,
+html[data-theme="neutral"] .node-panel .input-wrap .input-badge{
+  background: #22d3ee;
+  border-color: #22d3ee;
+  color: #0b1220;
+}
+
+.node-panel .input-wrap input,
+.node-panel .input-wrap select{
+  padding-top: 14px;
+}
+html[data-theme="dark"] .hero-trigrid-layer{ opacity: .38; }
+html[data-theme="light"] .hero-trigrid-layer{ opacity: .58; }
+
+html[data-theme="dark"] .hero-trigrid-layer .c1{ stroke: rgba(34,211,238,.14); }
+html[data-theme="dark"] .hero-trigrid-layer .c2{ stroke: rgba(255,255,255,.05); }
+
+html[data-theme="light"] .hero-trigrid-layer .c1{ stroke: rgba(15,23,42,.22); }
+html[data-theme="light"] .hero-trigrid-layer .c2{ stroke: rgba(0,0,0,.10); }
+
+
+
+.nav button[data-tab="payout"]{
+  position: relative;
+  padding-right: 48px; 
+}
+
+.nav button[data-tab="payout"]::after{
+  --o1: #ffd38a; --o2: #ff9c2d; --o3: #ff8a00;
+
+  content: "NEW";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 18px;            
+  padding: 0 6px;         
+  font-size: 9px;
+  font-weight: 1000;
+  letter-spacing: .28px;
+  text-transform: uppercase;
+  color: #2a1400;
+
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, var(--o1) 0%, var(--o2) 48%, var(--o3) 100%);
+  border: 1px solid rgba(255,138,0,.70);
+  box-shadow: 0 6px 18px rgba(255,138,0,.34);
+  border-radius: 4px;
+
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+
+  pointer-events: none; 
+  will-change: filter, transform;
+}
+
+.nav button[data-tab="payout"]:hover::after,
+.nav button.active[data-tab="payout"]::after{
+  filter: brightness(1.06) saturate(1.05);
+  box-shadow: 0 8px 22px rgba(255,138,0,.42);
+}
+
+#tab-payout .title .badge-new{ display:none !important; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-center">
+      <div id="heroValidator" class="hero" aria-label="Validator hero">
+        <div class="hero-trigrid-layer" aria-hidden="true">
+          <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="triGridPat" width="40" height="34.641016" patternUnits="userSpaceOnUse">
+                <g class="tri-strokes" stroke-width="1" fill="none" shape-rendering="geometricPrecision">
+                  <path class="c1" d="M0 34.641016 L20 0 L40 34.641016 Z"/>
+                  <path class="c2" d="M0 0 L20 34.641016 L40 0 Z"/>
+                </g>
+              </pattern>
+              <clipPath id="triClip">
+  <polygon points="500,0 1000,520 0,520"></polygon>
+              </clipPath>
+              <linearGradient id="sideFadeG" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="white" stop-opacity="0"/>
+                <stop offset="8%" stop-color="white" stop-opacity="1"/>
+                <stop offset="92%" stop-color="white" stop-opacity="1"/>
+                <stop offset="100%" stop-color="white" stop-opacity="0"/>
+              </linearGradient>
+              <mask id="sideFadeM">
+                <rect width="1000" height="700" fill="url(#sideFadeG)"></rect>
+              </mask>
+            </defs>
+            <rect width="1000" height="700" fill="url(#triGridPat)" clip-path="url(#triClip)" mask="url(#sideFadeM)"></rect>
+          </svg>
+        </div>
+        <div class="hero-anim" aria-hidden="true">
+          <svg class="ethGem" viewBox="0 0 256 416" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gEthA" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#8fb3ff"/>
+                <stop offset="1" stop-color="#22d3ee"/>
+              </linearGradient>
+              <linearGradient id="gEthB" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#5a6b9e"/>
+                <stop offset="1" stop-color="#8aa3c9"/>
+              </linearGradient>
+            </defs>
+            <polygon class="eth-piece d1" fill="url(#gEthA)" points="128,0 0,208 128,152" opacity="0.95"/>
+            <polygon class="eth-piece d2" fill="url(#gEthB)" points="128,152 256,208 128,0" opacity="0.8"/>
+            <polygon class="eth-piece d3" fill="url(#gEthB)" points="128,176 0,232 128,416" opacity="0.7"/>
+            <polygon class="eth-piece d4" fill="url(#gEthA)" points="128,416 256,232 128,176" opacity="0.88"/>
+          </svg>
+        </div>
+        <div class="hero-title" aria-label="validator tools">VALIDATOR TOOLS</div>
+      </div>
+      <div class="node-panel">
+        <div class="field">
+          <div class="input-wrap">
+            <label class="input-badge" for="beaconUrl">Beacon API base URL</label>
+            <input id="beaconUrl" value="https://lodestar-mainnet.chainsafe.io" placeholder="http://127.0.0.1:5052" />
+            <span id="beaconStatus" class="inline-chip hidden" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="input-wrap">
+            <label class="input-badge" for="rpcUrl">Execution RPC URL</label>
+            <input id="rpcUrl" value="https://eth.llamarpc.com" placeholder="https://mainnet.infura.io/v3/..." />
+            <span id="rpcStatus" class="inline-chip hidden" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="input-wrap">
+            <label class="input-badge" for="network">Network</label>
+            <select id="network" aria-label="Ethereum network">
+              <option value="mainnet">Ethereum Mainnet</option>
+              <option value="holesky">Holesky Testnet</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="align-self:end;">
+          <button class="btn" id="btnCheckNodes" type="button">Check nodes</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside class="sidebar" aria-label="Section navigation">
+      <nav class="nav">
+        <button data-tab="dashboard" class="active" title="Overview" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="2.5"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button data-tab="bls" title="BLS→0x01" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>
+          <span>BLS → 0x01</span>
+        </button>
+        <button data-tab="eip7002" title="EIP-7002 Exit/Partial" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+          <span>Exit / Partial</span>
+        </button>
+        <button data-tab="payout" title="Payout Rules" type="button">
+  <svg class="tab-ico" viewBox="0 0 24 24"><path d="M3 4h18M3 11h18M3 18h18"/><path d="M4 6v0M4 13v0M4 20v0"/></svg>
+  <span>Payout Rules</span>
+</button>
+<button data-tab="exit" title="Exit Tracker" type="button">
+  <svg class="tab-ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+  <span>Exit Tracker</span>
+</button>
+
+        <button data-tab="scanner" title="Withdrawals scanner" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><path d="M3 7V6a3 3 0 0 1 3-3h1"/><path d="M17 3h1a3 3 0 0 1 3 3v1"/><path d="M21 17v1a3 3 0 0 1-3 3h-1"/><circle cx="12" cy="12" r="3"/><path d="M16.5 16.5 14.5 14.5"/></svg>
+          <span>Scanner</span>
+        </button>
+        <button data-tab="watchdog" title="Watchdog" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V6l-8-4-8 4v6c0 6 8 10 8 10z"/></svg>
+          <span>Watchdog</span>
+        </button>
+        <button data-tab="scheduler" title="Smart scheduler 7002/7251" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><path d="M3 4h18M3 10h18M3 16h18"/><path d="M7 4v16"/></svg>
+          <span>Scheduler</span>
+        </button>
+        <button data-tab="eta" title="ETA calculator" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M12 3v18"/></svg>
+          <span>ETA</span>
+        </button>
+        <button data-tab="batch" title="Batch master" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          <span>Batch</span>
+        </button>
+        <button data-tab="settings" title="Settings" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24">
+            <path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.07a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1z"/>
+          </svg>
+          <span>Settings</span>
+        </button>
+        <button data-tab="help" title="Help" type="button">
+          <svg class="tab-ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17"/></svg>
+          <span>Help</span>
+        </button>
+      </nav>
+    </aside>
+    <main class="workspace">
+      <div id="loadingScrim" class="scrim" aria-hidden="true">
+        <div class="scrim-inner">
+          <div class="spinner" aria-label="Loading"></div>
+          <div id="loadingLabel" class="scrim-label">Processing…</div>
+        </div>
+      </div>
+      <section class="leftrail">
+        <div id="tab-dashboard" class="tab section">
+          <div class="title">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="2.5"/></svg>
+            <span>Dashboard</span>
+          </div>
+          <div id="dashboardRoot"></div>
+        </div>
+<div id="tab-payout" class="tab section hidden">
+  <div class="title">
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M3 4h18M3 11h18M3 18h18"/><path d="M4 6v0M4 13v0M4 20v0"/>
+    </svg>
+    <span>Payout Rules</span>
+    <span class="badge-new" aria-label="New feature">NEW</span>
+  </div>
+  <div id="payoutRoot"></div>
+</div>
+
+
+<div id="tab-exit" class="tab section hidden">
+  <div class="title">
+    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <span>Exit Tracker</span>
+  </div>
+  <div id="exitRoot"></div>
+</div>
+
+        <div id="tab-bls" class="tab section hidden">
+          <div class="title"><svg class="icon" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg><span>BLS → 0x01 (Update Withdrawal Credentials)</span></div>
+          <div class="band warn" style="margin-bottom:10px;">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M12 2l9 18H3L12 2z"/></svg>
+            <div class="muted">One-time change. After switching to <b>0x01</b> the withdrawal address becomes permanent. Verify everything before signing.</div>
+          </div>
+          <div class="row">
+            <div><label>BLS private key (hex)</label><div class="input-wrap"><input id="blsSk" placeholder="0x..." data-sensitive="true"/></div></div>
+            <div><label>Validator BLS public key (48 bytes)</label><div class="input-wrap"><input id="blsPub" placeholder="0x..."/></div></div>
+          </div>
+          <div class="row-3" style="margin-top:10px;">
+            <div><label>Validator index (6 digits)</label><div class="input-wrap"><input id="blsValIndex"/></div></div>
+            <div><label>Execution withdrawal address</label><div class="input-wrap"><input id="execAddr" placeholder="0x..."/></div></div>
+            <div><label>Genesis root (GVR, optional)</label><div class="input-wrap"><input id="gvr" placeholder="0x..."/></div></div>
+          </div>
+          <div class="btns" style="margin-top:12px;">
+            <button class="btn primary" id="btnBuildBls" type="button">Build & Sign</button>
+            <button class="btn ghost" id="btnSaveBls" type="button">Export JSON</button>
+            <button class="btn ghost" id="btnPostBls" type="button">Broadcast</button>
+          </div>
+        </div>
+        <div id="tab-eip7002" class="tab section hidden">
+          <div class="title"><svg class="icon" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v4M10 14L21 3"/></svg><span>EIP-7002: Exit / Partial Withdraw</span></div>
+          <div class="band" style="margin-bottom:10px;">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg>
+            <div class="muted">
+              Predeploy: <code>0x00000961Ef480Eb55e80D19ad83579A64c007002</code>.<br/>
+              <b>Exit:</b> Amount = <b>0</b> (Gwei). <b>Partial:</b> Amount &gt; 0 (Gwei).
+            </div>
+          </div>
+          <div class="row-3">
+            <div><label>EOA secret (private key OR seed phrase)</label><div class="input-wrap"><input id="eoaSk" placeholder="0x…  or  mnemonic" data-sensitive="true"/></div></div>
+            <div><label>Validator BLS pubkey (48 bytes)</label><div class="input-wrap"><input id="eip7002Pub" placeholder="0x..."/></div></div>
+            <div><label>Amount (Gwei) — 0 = Exit, &gt;0 = Partial</label><div class="input-wrap"><input id="eip7002Amt" placeholder="0"/></div></div>
+          </div>
+          <div class="btns" style="margin-top:12px;">
+            <button class="btn ghost" id="btnFee" type="button">Get fee</button>
+            <button class="btn primary" id="btnSubmit7002" type="button">Submit</button>
+          </div>
+          </div>
+        <div id="tab-scanner" class="tab section hidden">
+          <div class="title"><svg class="icon" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M10 18a8 8 0 110-16 8 8 0 010 16z"/></svg><span>Withdrawals Scanner (CL → EL)</span></div>
+          <p class="muted">Scanning recent slots for payouts to your execution address. Export to CSV.</p>
+          <div class="row-3">
+            <div><label>Execution withdrawal address</label><div class="input-wrap"><input id="scanAddr" placeholder="0x..."/></div></div>
+            <div><label>Lookback (slots)</label><div class="input-wrap"><input id="scanCount" placeholder="2048"/></div></div>
+            <div><label>Start slot (or 'head')</label><div class="input-wrap"><input id="scanStart" placeholder="head"/></div></div>
+          </div>
+          <div class="row-filter" style="margin-top:10px;">
+            <div>
+              <label>Validator filter (index or BLS pubkey)</label>
+              <div class="input-wrap"><input id="scanValFilter" placeholder="123456  or  0x… (48 bytes)"/></div>
+            </div>
+            <div class="actions">
+              <button class="btn primary" id="btnScan" type="button">Scan</button>
+              <button class="btn ghost" id="btnScanExport" type="button">Export CSV</button>
+            </div>
+          </div>
+          <div id="scanSummary" class="muted" style="margin-top:10px;"></div>
+          <div style="margin-top:12px; border-top:1px solid var(--border); padding-top:10px;">
+            <div class="muted" style="margin-bottom:6px;">Matches</div>
+            <div style="max-height:420px;">
+              <table id="scanTable">
+                <thead><tr><th>Slot</th><th>Withdrawal Index</th><th>Validator Index</th><th>Amount (Gwei)</th><th>Amount (ETH)</th><th>Address</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="tab-watchdog" class="tab section hidden">
+          <div class="title">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V6l-8-4-8 4v6c0 6 8 10 8 10z"/></svg>
+            <span>Watchdog (light)</span>
+          </div>
+          <p class="muted">Quick operator sanity check: status, slashed, effective balance, withdrawal creds type.</p>
+          <div class="row">
+            <div><label>Validator ID (pubkey or index)</label><div class="input-wrap"><input id="wdId" placeholder="0x... or 123456"/></div></div>
+            <div class="btns" style="align-items:end;"><button class="btn primary" id="btnWdCheck" type="button">Check</button></div>
+          </div>
+        </div>
+        <div id="tab-scheduler" class="tab section hidden">
+          <div class="title"><svg class="icon" viewBox="0 0 24 24"><path d="M3 4h18M3 10h18M3 16h18"/><path d="M7 4v16"/></svg><span>Smart Scheduler 7002 / 7251</span></div>
+          <div id="schedulerRoot"></div>
+        </div>
+        <div id="tab-eta" class="tab section hidden">
+          <div class="title"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M12 3v18"/></svg><span>ETA Calculator</span></div>
+          <div id="etaRoot"></div>
+        </div>
+        <div id="tab-batch" class="tab section hidden">
+          <div class="title"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Batch Master (7002)</span></div>
+          <div id="batchRoot"></div>
+        </div>
+        <div id="tab-settings" class="tab section hidden">
+          <div class="title">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1 2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.07a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1z"/>
+            </svg>
+            <span>Settings</span>
+          </div>
+          <div id="settingsRoot"></div>
+        </div>
+        <div id="tab-help" class="tab section hidden">
+          <div class="title">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1 5.82 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17"/></svg>
+            <span>Help</span>
+          </div>
+          <div id="helpRoot"></div>
+        </div>
+      </section>
+      <aside class="rightrail" aria-label="Output and console">
+        <div class="section">
+          <div class="title">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            <span>Output / Console</span>
+          </div>
+          <div class="console" id="console-overview">
+            <div class="toolbar"><button class="btn ghost" data-copy="#ovOut" type="button">Copy</button></div>
+            <pre id="ovOut">Fill Beacon URL + BLS pubkey or index, then press "Check".</pre>
+          </div>
+          <div class="console hidden" id="console-bls" style="margin-top:12px;">
+            <div class="toolbar"><button class="btn ghost" data-copy="#blsOut" type="button">Copy</button></div>
+            <pre id="blsOut"></pre>
+          </div>
+          <div class="console hidden" id="console-7002" style="margin-top:12px;">
+            <div class="toolbar"><button class="btn ghost" data-copy="#w7002Out" type="button">Copy</button></div>
+            <pre id="w7002Out"></pre>
+          </div>
+          <div class="console hidden" id="console-watchdog" style="margin-top:12px;">
+            <div class="toolbar"><button class="btn ghost" data-copy="#wdOut" type="button">Copy</button></div>
+            <pre id="wdOut"></pre>
+          </div>
+          <div id="etaConsoleHost" style="margin-top:12px;"></div>
+          <div id="schedulerConsoleHost" style="margin-top:12px;"></div>
+          <div id="batchConsoleHost" style="margin-top:12px;"></div>
+        </div>
+      </aside>
+    </main>
+    <footer id="globalFooter" role="contentinfo" aria-label="Global status">
+      <div class="gf">
+        <div id="gfBeacon" class="gf-section">
+          <span class="gf-label">Beacon</span>
+          <span id="gfBeaconLat">—</span>
+        </div>
+        <div id="gfRpc" class="gf-section">
+          <span class="gf-label">RPC</span>
+          <span id="gfRpcLat">—</span>
+        </div>
+        <div id="gfCooldown" class="gf-section gf-cooldown">
+          <span class="gf-label">Cooldown</span>
+          <div class="gf-bar"><div id="gfCoolFill"></div></div>
+          <span id="gfCooldownVal">0 ms</span>
+        </div>
+        <div></div>
+        <div id="gfRightHead" class="gf-section">
+          <span class="gf-label">Head</span>
+          <span id="gfHeadVal">—</span>
+        </div>
+        <div id="gfRightChain" class="gf-section">
+          <span class="gf-label">Chain</span>
+          <span id="gfChainVal">—</span>
+        </div>
+        <div id="gfRightAge" class="gf-section">
+          <span class="gf-label">Refreshed</span>
+          <span id="gfAgeVal">—</span>
+        </div>
+      </div>
+    </footer>
+  <div class="modal-backdrop" id="errorBackdrop"></div>
+  <div class="modal" id="errorModal" role="dialog" aria-modal="true" aria-labelledby="errorTitle" aria-describedby="errorMessage">
+    <div class="box error">
+      <div class="error-head">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l10 18H2L12 2z"></path><path d="M12 8v5"></path><path d="M12 17h.01"></path></svg>
+        <div>
+          <div id="errorTitle" class="title" data-i18n="modal.errorTitle">Action failed</div>
+          <div class="muted" id="errorHint" data-i18n="modal.errorHint">You can close the window and try again.</div>
+        </div>
+      </div>
+      <div class="error-body">
+        <div id="errorMessage" class="error-msg"></div>
+        <details class="error-details" id="errorDetailsWrap">
+          <summary data-i18n="modal.details">Details</summary>
+          <pre id="errorDetails"></pre>
+        </details>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="errorCloseBtn" data-i18n="common.close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="successBackdrop"></div>
+  <div class="modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle" aria-describedby="successBody">
+    <div class="box success">
+      <div class="success-head">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"></path></svg>
+        <div>
+          <div id="successTitle" class="title" data-i18n="modal.successTitle">Nodes are healthy</div>
+          <div class="muted" data-i18n="modal.successHint">Beacon & RPC responded successfully</div>
+        </div>
+      </div>
+      <div id="successBody" class="success-body"></div>
+      <div class="modal-actions">
+        <button class="btn" id="successCloseBtn" data-i18n="common.close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="confirmBackdrop"></div>
+  <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmBody">
+    <div class="box confirm">
+      <div class="confirm-head">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4m0 4h.01"></path></svg>
+        <div>
+          <div id="confirmTitle" class="title" data-i18n="modal.confirmTitle">Confirm action</div>
+          <div class="muted" data-i18n="modal.confirmHint">Check data before proceeding</div>
+        </div>
+      </div>
+      <div id="confirmBody" class="confirm-body"></div>
+      <div class="modal-actions">
+        <button class="btn" id="confirmCancelBtn" data-i18n="common.cancel" type="button">Cancel</button>
+        <button class="btn primary" id="confirmProceedBtn" data-i18n="common.proceed" type="button">Proceed</button>
+      </div>
+    </div>
+  </div>
+  <div id="bootError" style="position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,.85); z-index: 100000;">
+    <div style="width:min(900px,90vw); max-height:80vh; overflow:auto; border:1px solid #ef4444; background:#170b0b; padding:14px;">
+      <div style="display:flex; align-items:center; gap:10px; color:#ffbdbd; font-weight:900; margin-bottom:8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="stroke:#ff8b8b; fill:none; stroke-width:1.8">
+          <path d="M12 2l10 18H2L12 2z"></path><path d="M12 8v5"></path><path d="M12 17h.01"></path>
+        </svg>
+        <span data-i18n="runtime.title">Renderer runtime error</span>
+      </div>
+      <pre id="bootErrorMsg" style="white-space:pre-wrap; word-break:break-word; color:#ffe1e1; margin:0;"></pre>
+    </div>
+  </div>
+  <div id="tooltip" class="tooltip hidden" role="tooltip" aria-hidden="true"></div>
+  <div id="toast" class="toast" aria-live="polite" role="status"></div>
+  <noscript>
+    <div style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#0b0c0f; color:#fff; z-index:999999;">
+      JavaScript is required to run this app.
+    </div>
+  </noscript>
+
+  <script type="module" src="./index.js"></script>
+
+  <script nonce="vtlock">
+    (function(){
+      var headEl = document.getElementById('gfHeadVal');
+      var chainEl = document.getElementById('gfChainVal');
+      var ageEl = document.getElementById('gfAgeVal');
+      var secHead = document.getElementById('gfRightHead');
+      var secChain = document.getElementById('gfRightChain');
+      var secAge = document.getElementById('gfRightAge');
+      var lastUpdateTs = 0;
+      function expectedChainId(){
+        var sel = document.getElementById('network');
+        var v = sel && sel.value ? sel.value : 'mainnet';
+        return v === 'holesky' ? 17000 : 1;
+      }
+      function updateHead(){
+        try{
+          var src = document.getElementById('beaconHead');
+          var txt = src ? (src.textContent || '').trim() : '';
+          var slot = null;
+          var m = txt.match(/#?(\d+)/);
+          if(m){ slot = parseInt(m[1], 10); }
+          if(slot != null){
+            var epoch = Math.floor(slot / 32);
+            headEl.textContent = "#" + slot + " (e" + epoch + ")";
+            secHead.classList.remove('bad','warn'); secHead.classList.add('ok');
+            lastUpdateTs = Date.now();
+          }else{
+            headEl.textContent = "—";
+            secHead.classList.remove('ok','warn'); secHead.classList.add('bad');
+          }
+        }catch(_){}
+      }
+      function updateChain(){
+        try{
+          var src = document.getElementById('rpcInfo');
+          var txt = src ? (src.textContent || '').trim() : '';
+          var cid = null, blk = null;
+          var m1 = txt.match(/chainId\s+(\d+)/i);
+          if(m1){ cid = parseInt(m1[1],10); }
+          var m2 = txt.match(/block\s+(\d+)/i);
+          if(m2){ blk = parseInt(m2[1],10); }
+          if(cid != null && blk != null){
+            chainEl.textContent = cid + " • " + blk;
+            var ok = (cid === expectedChainId());
+            secChain.classList.remove('ok','warn','bad');
+            secChain.classList.add(ok ? 'ok' : 'warn');
+            lastUpdateTs = Date.now();
+          }else{
+            chainEl.textContent = "—";
+            secChain.classList.remove('ok','warn'); secChain.classList.add('bad');
+          }
+        }catch(_){}
+      }
+      function updateAge(){
+        var now = Date.now();
+        var ageMs = Math.max(0, now - lastUpdateTs);
+        var ageSec = Math.floor(ageMs / 1000);
+        ageEl.textContent = lastUpdateTs ? ("t-" + ageSec + " s") : "—";
+        secAge.classList.remove('ok','warn','bad');
+        if(!lastUpdateTs){ secAge.classList.add('bad'); }
+        else if(ageSec <= 5){ secAge.classList.add('ok'); }
+        else if(ageSec <= 20){ secAge.classList.add('warn'); }
+        else { secAge.classList.add('bad'); }
+      }
+      function setupObservers(){
+        var opt = { childList: true, subtree: true, characterData: true };
+        var headSrc = document.getElementById('beaconHead');
+        var rpcSrc = document.getElementById('rpcInfo');
+        if(headSrc){
+          new MutationObserver(function(){ updateHead(); }).observe(headSrc, opt);
+        }
+        if(rpcSrc){
+          new MutationObserver(function(){ updateChain(); }).observe(rpcSrc, opt);
+        }
+        updateHead();
+        updateChain();
+        lastUpdateTs = Date.now();
+        updateAge();
+      }
+      document.addEventListener('DOMContentLoaded', function(){
+        setupObservers();
+        setInterval(updateAge, 1000);
+        var netSel = document.getElementById('network');
+        if(netSel){ netSel.addEventListener('change', updateChain); }
+      });
+    })();
+  </script>
+  <script nonce="vtlock">
+    var ETH_ANIM_DATA = {"nm":"Ethereum","ddd":0,"h":600,"w":600,"meta":{"g":"@lottiefiles/toolkit-js 0.65.0"},"layers":[{"ty":0,"nm":"Pre-comp 1","sr":1,"st":-9,"op":61,"ip":-9,"ln":"50","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[300,300]},"s":{"a":1,"k":[{"s":[100,100,100],"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":43},{"s":[117,117,98.319],"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":49},{"s":[100,100,85.47],"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":52}]},"p":{"a":0,"k":[300,300]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"w":600,"h":600,"refId":"1","ind":1}],"v":"5.7.0","fr":30,"op":61,"ip":0,"assets":[{"nm":"Pre-comp 1","id":"1","layers":[{"ty":4,"nm":"Layer 5 Outlines","sr":1,"st":9,"op":54984,"ip":9,"ln":"39","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[56.266,92.344,0]},"s":{"a":0,"k":[100,100]},"p":{"a":1,"k":[{"o":{"x":0.333,"y":0},"i":{"x":0.667,"y":1},"s":[243.984,-164.605,0],"t":9},{"s":[243.984,211.395,0],"t":38}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[56.017,-92.094],[-56.017,92.094],[56.017,41.17]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.5294,0.5686,0.6941]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,92.344]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":1},{"ty":4,"nm":"Layer 4 Outlines","sr":1,"st":9,"op":54984,"ip":9,"ln":"38","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[56.267,92.344,0]},"s":{"a":0,"k":[100,100]},"p":{"a":1,"k":[{"o":{"x":0.333,"y":0},"i":{"x":0.667,"y":1},"s":[356.016,-164.605,0],"t":9},{"s":[356.016,211.395,0],"t":38}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-56.016,-92.094],[56.016,92.094],[-56.016,41.17]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.3961,0.4118,0.5686]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,92.344]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":2},{"ty":4,"nm":"Layer 3 Outlines","sr":1,"st":9,"op":54984,"ip":9,"ln":"37","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[56.267,58.238,0]},"s":{"a":0,"k":[100,100]},"p":{"a":1,"k":[{"o":{"x":0.333,"y":0},"i":{"x":0.667,"y":1},"s":[243.983,-65.446,0],"t":9},{"s":[243.983,310.554,0],"t":38}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-56.016,25.462],[56.016,-25.462],[56.016,25.462]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.3961,0.4118,0.5686]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,25.712]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 2","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-56.016,-32.526],[56.016,32.526],[56.016,-32.526]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.3961,0.4118,0.5686]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,83.7]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":3},{"ty":4,"nm":"Layer 2 Outlines","sr":1,"st":9,"op":54984,"ip":9,"ln":"36","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[56.267,58.238,0]},"s":{"a":0,"k":[100,100]},"p":{"a":1,"k":[{"o":{"x":0.333,"y":0},"i":{"x":0.667,"y":1},"s":[356.017,-65.446,0],"t":9},{"s":[356.017,310.554,0],"t":38}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[56.017,-32.526],[-56.017,32.526],[-56.017,-32.526]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.2745,0.2941,0.4627]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,83.7]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Group 2","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[56.017,25.462],[-56.017,-25.462],[-56.017,25.462]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.2745,0.2941,0.4627]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,25.712]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":4},{"ty":4,"nm":"Layer 6 Outlines","sr":1,"st":0,"op":54975,"ip":0,"ln":"35","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[56.267,78.465,0]},"s":{"a":0,"k":[100,100]},"p":{"a":1,"k":[{"o":{"x":0.333,"y":0},"i":{"x":0.667,"y":1},"s":[356.017,712.485,0],"t":9},{"s":[356.017,402.485,0],"t":38}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[56.017,-78.215],[-56.017,78.215],[-56.017,-13.163]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.3961,0.4118,0.5686]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,78.464]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":5},{"ty":4,"nm":"Layer 1 Outlines","sr":1,"st":0,"op":54975,"ip":0,"ln":"34","hasMask":false,"ao":0,"ks":{"a":{"a":0,"k":[56.267,78.465,0]},"s":{"a":0,"k":[100,100]},"p":{"a":1,"k":[{"o":{"x":0.333,"y":0},"i":{"x":0.667,"y":1},"s":[243.983,712.485,0],"t":9},{"s":[243.983,402.485,0],"t":38}]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}},"shapes":[{"ty":"gr","nm":"Group 1","it":[{"ty":"sh","nm":"Path 1","d":1,"ks":{"a":0,"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-56.016,-78.215],[56.016,78.215],[56.016,-13.163]]}}},{"ty":"fl","nm":"Fill 1","c":{"a":0,"k":[0.5294,0.5686,0.6941]},"r":1,"o":{"a":0,"k":100}},{"ty":"tr","a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"p":{"a":0,"k":[56.266,78.464]},"r":{"a":0,"k":0},"sa":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ind":6}]}]};
+    (function(){
+      function setEthDurationFromData(){
+        try{
+          var dur = (ETH_ANIM_DATA && ETH_ANIM_DATA.op && ETH_ANIM_DATA.fr)
+            ? (ETH_ANIM_DATA.op / ETH_ANIM_DATA.fr)
+            : 2.05;
+          document.documentElement.style.setProperty('--eth-dur', dur + 's');
+        }catch(_){}
+      }
+      function setupTabPulse(){
+        var hero = document.querySelector('#heroValidator .hero-anim');
+        if(!hero) return;
+        function pulseOnce(){
+          hero.classList.remove('pulse');
+          void hero.offsetWidth;
+          hero.classList.add('pulse');
+        }
+        hero.addEventListener('animationend', function(ev){
+          if(ev.animationName === 'ethPulse'){ hero.classList.remove('pulse'); }
+        });
+        var nav = document.querySelector('.nav');
+        if(nav){
+          nav.addEventListener('click', function(e){
+            var btn = e.target.closest('button[data-tab]');
+            if(btn) pulseOnce();
+          }, { passive: true });
+        }
+      }
+      function syncTopbarHeight(){
+        var tb = document.querySelector('.topbar');
+        if(tb){
+          document.documentElement.style.setProperty('--scrim-top', tb.offsetHeight + 'px');
+        }
+      }
+      document.addEventListener('DOMContentLoaded', function(){
+        setEthDurationFromData();
+        syncTopbarHeight();
+        setupTabPulse();
+      });
+      window.addEventListener('resize', syncTopbarHeight);
+    })();
+  </script>
+
+  <div class="version-badge">Version 0.1.7</div>
+
+</body>
+</html>

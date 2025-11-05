@@ -1,0 +1,48 @@
+# Node / dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json*
+pnpm-lock.yaml
+yarn.lock
+
+# Builds / artifacts
+dist/
+out/
+build/
+release/
+coverage/
+*.tsbuildinfo
+
+# Electron
+*.asar
+*.asar.unpacked/
+.DS_Store
+Thumbs.db
+
+# IDE / tooling
+.vscode/
+.idea/
+*.iml
+
+# OS junk
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+logs/
+lerna-debug.log*
+
+# Misc
+.env
+.env.*
+*.local

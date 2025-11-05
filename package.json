@@ -1,0 +1,126 @@
+{
+  "name": "validator-tool",
+  "version": "0.1.7",
+  "private": true,
+  "description": "Desktop GUI for Ethereum validators: BLS→0x01, EIP-7002 (exit/partial), scanner, scheduler, operator console.",
+  "main": "dist/main/index.js",
+  "type": "commonjs",
+  "author": "Daniel Thermons, Alex Girin, Vincent Brook",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/teoteam7/validator-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/teoteam7/validator-tools/issues"
+  },
+  "homepage": "https://github.com/teoteam7/validator-tools#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build:ts": "tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json",
+    "copy:renderer": "node scripts/copyRenderer.mjs",
+    "build": "npm run clean && npm run build:ts && npm run copy:renderer",
+    "start": "npm run build && electron .",
+    "dev:main": "tsc -p tsconfig.main.json --watch",
+    "dev:renderer": "tsc -p tsconfig.renderer.json --watch",
+    "dev": "concurrently -k -n main,renderer,electron -c blue,green,magenta \"npm:dev:main\" \"npm:dev:renderer\" \"wait-on dist/main/index.js && electron .\"",
+    "gen:ico": "node scripts/genIco.mjs",
+    "dist": "npm run build && npx electron-builder",
+    "dist:linux": "npm run build && npx electron-builder -l",
+    "dist:winportable": "npm run build && npx electron-builder -w portable",
+    "dist:mac": "npm run build && npx electron-builder -m dmg"
+  },
+  "build": {
+    "appId": "com.validator.tool",
+    "productName": "Validator Toolkit",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "buildResources": "public"
+    },
+    "npmRebuild": false,
+    "beforePack": "scripts/builder-hooks.cjs",
+    "files": [
+      "dist/**/*",
+      "src/preload/index.cjs",
+      "LICENSE",
+      "package.json",
+      "node_modules/ethers/**/*",
+      "node_modules/@chainsafe/ssz/**/*",
+      "node_modules/@noble/bls12-381/**/*",
+      "node_modules/@noble/curves/**/*",
+      "!**/@chainsafe/hashtree*/**",
+      "!**/@chainsafe/hashtree*",
+      "!**/*.map"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.utilities",
+      "icon": "public/icons/mac.icns",
+      "artifactName": "${productName}-${version}.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/icons/win.png",
+      "artifactName": "${productName}-${version}-${os}-${arch}-portable.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "tar.gz"
+      ],
+      "category": "Utility",
+      "executableName": "validator-toolkit",
+      "icon": "public/icons/linux.png",
+      "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+    }
+  },
+  "dependencies": {
+    "@chainsafe/ssz": "^1.2.2",
+    "@noble/bls12-381": "^1.4.0",
+    "@noble/curves": "^1.9.6",
+    "ethers": "^6.13.2",
+    "motion": "^10.16.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "concurrently": "^8.2.2",
+    "electron": "^30.5.1",
+    "electron-builder": "^26.0.12",
+    "png-to-ico": "^2.1.8",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.6.3",
+    "wait-on": "^7.2.0"
+  },
+  "keywords": [
+    "ethereum",
+    "validator",
+    "eip-7002",
+    "bls",
+    "capella",
+    "electron",
+    "desktop"
+  ],
+  "contributors": [
+    {
+      "name": "Daniel Thermons"
+    },
+    {
+      "name": "Alex Girin"
+    },
+    {
+      "name": "Vincent Brook"
+    }
+  ]
+}
