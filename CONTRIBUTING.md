@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve **Validator Toolkit**!
+Thanks for helping improve **Validator Tools**!
 
 ## Quick Start (Dev)
 ```bash
