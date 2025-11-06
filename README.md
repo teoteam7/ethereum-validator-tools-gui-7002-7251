@@ -193,6 +193,4 @@ npm run dev        # watch main/renderer + Electron reload
 
 ---
 
-## License
 
-MIT.
