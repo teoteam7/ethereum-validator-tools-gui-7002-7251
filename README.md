@@ -36,6 +36,10 @@ Desktop toolkit for Ethereum validator operations. Build, sign, and export BLS�
 - **Queue visualizer & builder-aware alerts.** Live pressure graphs and guidance to target favorable inclusion windows for request submission.
 
 ---
+### 🖥️ GUI — Validator Tools for Ethereum (Desktop CL/EL)
+
+<img width="1325" height="1116" alt="image_2025-11-06_03-06-22" src="https://github.com/user-attachments/assets/8979820e-d9aa-4af5-a96f-388d5fbb7802" />
+
 
 ## Contracts & Protocol Constants
 
